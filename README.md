@@ -1,6 +1,6 @@
 # LojaVirtual
 
-O projet escolhido que será realizado pelo grupo é o desenvolvimento de um simulador de loja virtual. O sistema será capaz de realizar ações básicas de uma loja virtual real, como: cadastro de usuários, cadastro de produtos, gerenciamento de estoque, simulação de compras e geração de relatórios.
+O projeto escolhido que será realizado pelo grupo é o desenvolvimento de um simulador de loja virtual. O sistema será capaz de realizar ações básicas de uma loja virtual real, como: cadastro de usuários, cadastro de produtos, gerenciamento de estoque, simulação de compras e geração de relatórios.
 
 # Funcionalidades
 
