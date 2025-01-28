@@ -1,0 +1,141 @@
+class System {
+-String storeName
+-List~User~ users
+-List~Product~ products
+-List~Sale~ sales
+-List~Order~ orders
++addProduct(product: Product): void
++removeProduct(product_id: String): void
++addUser(user: User): void
++removeUser(email: String): void
++processOrder(client: Client, payment: Payment): Order
++generateSalesReport(): String
++generateInventoryReport(): String
++searchProduct(keyword: String): List~Product~
++applyDiscount(order: Order, discount_code: String): void
++notifyClient(client: Client, message: String): void
+}
+
+    class User {
+        <<abstract>>
+        -String name
+        -String email
+        +User(name: String, email: String)
+        +get_name(): String
+        +get_email(): String
+    }
+
+    class Administrator {
+        +manageProducts(): void
+        +manageClients(): void
+    }
+
+    class Client {
+        -Cart cart
+        -Wishlist wishlist
+        +addToCart(product: Product): void
+        +checkout(payment: Payment): Sale
+        +addToWishlist(product: Product): void
+    }
+
+    class Product {
+        -String product_id
+        -String name
+        -float price
+        -String description
+        -Category category
+    }
+
+    class Cart {
+        -List~Product~ products
+        -float totalPrice
+        +addProduct(product: Product): void
+        +removeProduct(product: Product): void
+        +calculateTotal(): float
+    }
+
+    class Sale {
+        -Client client
+        -List~Product~ products
+        -float totalPrice
+        -Date date
+        -Payment payment
+    }
+
+    class Payment {
+        <<abstract>>
+        -float amount
+        -Date payment_date
+        +Payment(amount: float)
+        +processPayment(): void
+    }
+
+    class Cash {
+        +processPayment(): void
+    }
+
+    class Card {
+        -String card_number
+        -String expiry_date
+        +Card(amount: float, card_number: String, expiry_date: String)
+        +processPayment(): void
+    }
+
+    class Category {
+        -String category_id
+        -String name
+        -String description
+    }
+
+    class Order {
+        -String order_id
+        -Client client
+        -List~Product~ products
+        -float total_price
+        -Date order_date
+    }
+
+    class Shipping {
+        -String shipping_id
+        -Order order
+        -String address
+        -String shipping_method
+        -float shipping_cost
+    }
+
+    class Review {
+        -String review_id
+        -Product product
+        -Client client
+        -int rating
+        -String comment
+        -Date review_date
+    }
+
+    class Wishlist {
+        -String wishlist_id
+        -Client client
+        -List~Product~ products
+    }
+
+    User <|-- Administrator
+    User <|-- Client
+    Payment <|-- Cash
+    Payment <|-- Card
+
+    System "1" *-- "0..*" User : manages
+    System "1" *-- "0..*" Product : manages
+    System "1" *-- "0..*" Sale : tracks
+    System "1" *-- "0..*" Order : tracks
+    Client "1" *-- "1" Cart : has
+    Client "1" *-- "1" Wishlist : has
+    Cart "1" *-- "0..*" Product : contains
+    Sale "1" *-- "1" Client : belongs to
+    Sale "1" *-- "0..*" Product : contains
+    Sale "1" *-- "1" Payment : uses
+    Product "1" *-- "1" Category : belongs to
+    Order "1" *-- "1" Client : belongs to
+    Order "1" *-- "0..*" Product : contains
+    Shipping "1" *-- "1" Order : belongs to
+    Review "1" *-- "1" Product : belongs to
+    Review "1" *-- "1" Client : belongs to
