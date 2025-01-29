@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 
-// Classe User
+// Classe User (abstrata)
 class User {
 protected:
     string name;
@@ -20,6 +20,15 @@ public:
 
     string get_email() const {
         return email;
+    }
+
+    // Métodos para modificar os atributos
+    void set_name(const string& new_name) {
+        name = new_name;
+    }
+
+    void set_email(const string& new_email) {
+        email = new_email;
     }
 
     // Método virtual puro
