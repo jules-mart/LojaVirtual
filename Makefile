@@ -7,21 +7,19 @@ CXXFLAGS = -Iincludes -std=c++17
 SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
-BIN_DIR = bin
 
 # Source and object files
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRCS))
 
 # Executable name
-TARGET = $(BIN_DIR)/VirtualMarket
+TARGET = store
 
 # Default target
 all: $(TARGET)
 
 # Link object files to create the executable
 $(TARGET): $(OBJS)
-	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # Compile source files into object files
@@ -31,11 +29,11 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 # Run the program
 run: $(TARGET)
-	@$(TARGET)
+	@./$(TARGET) Lojinha
 
 # Clean up build artifacts
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	rm -rf $(BUILD_DIR) $(TARGET)
 
 # Phony targets (not actual files)
 .PHONY: all run clean
