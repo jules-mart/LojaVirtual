@@ -3,5 +3,8 @@
 
 #include <iostream>
 #include <limits>
+#include <fstream>
+#include <memory>
+#include <sstream>
 
 #endif

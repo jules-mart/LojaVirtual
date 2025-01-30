@@ -5,3 +5,6 @@ a.out
 bin/
 build/
 store
+*.exe
+
+.vscode
