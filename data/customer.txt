@@ -1,1 +1,1 @@
-roni roni@store.com 123
+customer;customer@store.com;654321

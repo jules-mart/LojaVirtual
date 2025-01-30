@@ -1,1 +1,1 @@
-joao@gmail.com;Matheus Leonardo;senha123
+root@store.com;root;123456
