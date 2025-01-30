@@ -1,22 +1,61 @@
 #include <Admin.hpp>
 #include <User.hpp>
 
-Admin::Admin(std::string &name, std::string &email, std::string &password) : User(name, email, password) {};
+using namespace std;
+
+Admin::Admin(string &name, string &email, string &password) : Admin(name, email, password) {};
+
+Admin::~Admin() {};
+
+bool Admin::getUser(string email) const
+{
+    ifstream file("data/admin.txt");
+    string linha;
+
+    while (getline(file, linha))
+    {
+        istringstream iss(linha);
+        string emailArquivo, nomeArquivo, passwordArquivo;
+
+        getline(iss, emailArquivo, ' ');
+        getline(iss, nomeArquivo, ' ');
+        getline(iss, passwordArquivo, ' ');
+
+        if (emailArquivo == email)
+        {
+            file.close();
+
+            return true;
+
+            // if (arquivo == "data/admins.txt")
+            // {
+            //     return new Admin(nomeArquivo, emailArquivo, passwordArquivo);
+            // }
+            // else if (arquivo == "data/customer.txt")
+            // {
+            //     return new Customer(nomeArquivo, emailArquivo, passwordArquivo);
+            // }
+        }
+    }
+
+    file.close();
+    return false;
+}
 
 bool Admin::createNewUser() const
 {
-    if (User::getUser(Email, "data/admins.txt"))
+    if (getUser(this->email))
     {
-        return false; // Usuário já existe
+        return false;
     }
 
-    std::ofstream file("data/admin.txt", std::ios::app); // Abre o arquivo em modo de append
+    ofstream file("data/admin.txt", ios::app);
     if (!file.is_open())
     {
-        return false; // Erro ao abrir o arquivo
+        return false;
     }
 
-    file << Email << " " << Name << " " << Password << "\n"; // Escreve os dados no arquivo
+    file << email << " " << name << " " << password << "\n";
     file.close();
-    return true; // Usuário adicionado com sucesso
+    return true;
 }
