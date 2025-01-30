@@ -5,6 +5,6 @@
 #include <StoreSystem.hpp>
 #include <User.hpp>
 #include <Admin.hpp>
-#include <Costumer.hpp>
+#include <Customer.hpp>
 
 #endif

@@ -81,10 +81,10 @@ int StoreSystem::run(void)
 
 void StoreSystem::loadProducts(void)
 {
-    ifstream file("data/products.txt");
+    ifstream file("data/product.txt");
     if (!file.is_open())
     {
-        cerr << "Error: could not open file 'data/products.txt'." << endl;
+        cerr << "Error: could not open file 'data/product.txt'." << endl;
         return;
     }
 
