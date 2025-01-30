@@ -45,7 +45,7 @@ int StoreSystem::run(void)
 
         StoreSystem::clear();
         string name, email, password;
-        bool canLogIn = false;
+        bool canLogIn = false, userCreated = false;
         switch (choice)
         {
         case 1:
@@ -84,7 +84,12 @@ int StoreSystem::run(void)
             cin >> email;
             cout << "Enter your password: ";
             cin >> password;
-            Customer::createNewUser(name, email, password);
+            userCreated = Customer::createNewUser(name, email, password);
+            if (userCreated) {
+                cout << "Account created successfully. Now, you can log in as a customer" << endl;
+            } else {
+                cout << "Email already in use. Try again with another one." << endl;
+            }
             break;
         case 4:
             cout << "Exiting..." << endl;
