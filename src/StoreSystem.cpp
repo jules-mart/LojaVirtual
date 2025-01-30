@@ -5,6 +5,7 @@ StoreSystem::StoreSystem(const string &name) : storeName(name)
 {
     cout << "Initializing system..." << endl;
     cout << "The store '" << storeName << "' is now open." << endl;
+    loadProducts();
 }
 
 StoreSystem::~StoreSystem()
@@ -75,5 +76,47 @@ int StoreSystem::run(void)
         }
         cout << "Email: " << email << endl;
         cout << "Password: " << password << endl;
+    }
+}
+
+void StoreSystem::loadProducts(void)
+{
+    ifstream file("data/products.txt");
+    if (!file.is_open())
+    {
+        cerr << "Error: could not open file 'data/products.txt'." << endl;
+        return;
+    }
+
+    products.clear();
+    string line;
+    while (getline(file, line))
+    {
+
+        istringstream iss(line);
+        int id, quantity;
+        string name;
+        float price;
+
+        if (iss >> id >> name >> price >> quantity)
+        {
+            Product product(id, name, price, quantity);
+            products.push_back(product);
+        }
+        else
+        {
+            cerr << "Error: Invalid product format in file: " << line << endl;
+        }
+    }
+    file.close();
+}
+
+void StoreSystem::listProducts(void)
+{
+    loadProducts();
+    cout << "Products available:" << endl;
+    for (Product product : products)
+    {
+        cout << product.getId() << " - " << product.getName() << " - R$" << product.getPrice() << " - " << product.getQuantity() << endl;
     }
 }

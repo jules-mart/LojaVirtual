@@ -2,31 +2,31 @@
 
 using namespace std;
 
-Product::Product(std::string id, std::string name, double price, int quantity) : id(id), name(name), price(price), quantity(quantity)
+Product::Product(int id, std::string name, float price, int quantity) : id(id), name(name), price(price), quantity(quantity)
 {
 }
 Product::~Product() {};
 
-std::string Product::getId() {
-    return this->id;
+int Product::getId() {
+    return id;
 };
 std::string Product::getName() {
-    return this->name;
+    return name;
 };
-double Product::getPrice() {
-    return this->price;
+float Product::getPrice() {
+    return price;
 };
 int Product::getQuantity() {
-    return this->quantity;
+    return quantity;
 };
 
-void Product::setId(std::string id) {
+void Product::setId(int id) {
     this->id = id;
 };
 void Product::setName(std::string name) {
     this->name = name;
 };
-void Product::setPrice(double price) {
+void Product::setPrice(float price) {
     this->price = price;
 };
 void Product::setQuantity(int quantity) {

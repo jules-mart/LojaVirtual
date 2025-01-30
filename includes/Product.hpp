@@ -2,22 +2,22 @@
 
 class Product {
     private:
-        std::string id;
+        int id;
         std::string name;
-        double price;
+        float price;
         int quantity;
 
     public:
-        Product(std::string id, std::string name, double price, int quantity);
+        Product(int id, std::string name, float price, int quantity);
         ~Product();
 
-        std::string getId();
+        int getId();
         std::string getName();
-        double getPrice();
+        float getPrice();
         int getQuantity();
 
-        void setId(std::string id);
+        void setId(int id);
         void setName(std::string name);
-        void setPrice(double price);
+        void setPrice(float price);
         void setQuantity(int quantity);
 };

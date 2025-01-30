@@ -6,5 +6,6 @@
 #include <fstream>
 #include <memory>
 #include <sstream>
+#include <vector>
 
 #endif
