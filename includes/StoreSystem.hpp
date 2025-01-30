@@ -9,10 +9,11 @@ private:
     std::string storeName;
 
 public:
-    StoreSystem(const std::string &name) : storeName(name) {
-        std::cout << "Initializing system..." << std::endl;
-        std::cout << "The store '" << storeName << "' is now open." << std::endl;
-    }
+    StoreSystem(const std::string &name);
+    ~StoreSystem();
+
+    int run(void);
+    void clear();
 };
 
 #endif
