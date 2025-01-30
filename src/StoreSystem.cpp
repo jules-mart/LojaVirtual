@@ -90,7 +90,7 @@ void StoreSystem::loadProducts(void)
 
     products.clear();
     string line;
-    while (getline(file, line))
+    while (getline(file, line, ';'))
     {
 
         istringstream iss(line);

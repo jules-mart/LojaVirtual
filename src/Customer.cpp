@@ -16,9 +16,9 @@ bool Customer::getUser(string email) const
         istringstream iss(linha);
         string emailArquivo, nomeArquivo, passwordArquivo;
 
-        getline(iss, emailArquivo, ' ');
-        getline(iss, nomeArquivo, ' ');
-        getline(iss, passwordArquivo, ' ');
+        getline(iss, emailArquivo, ';');
+        getline(iss, nomeArquivo, ';');
+        getline(iss, passwordArquivo, ';');
 
         if (emailArquivo == email)
         {
@@ -54,7 +54,7 @@ bool Customer::createNewUser() const
         return false;
     }
 
-    file << email << " " << username << " " << password << "\n";
+    file << email << ";" << username << ";" << password << "\n";
     file.close();
     return true;
 }
