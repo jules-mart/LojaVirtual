@@ -6,15 +6,12 @@
 class User
 {
 protected:
-    std::string Name;
-    std::string Email;
-    std::string Password;
+    std::string name;
+    std::string email;
+    std::string password;
 
 public:
-    User(std::string &nome, std::string &email, std::string &password);
-
-    static bool getUser(std::string email, const std::string &arquivo);
-
+    virtual bool getUser(std::string email) const = 0;
     virtual bool createNewUser() const = 0;
 };
 
