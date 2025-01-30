@@ -13,8 +13,9 @@ protected:
 public:
     User(std::string &name, std::string &email, std::string &password);
 
-    virtual bool getUser(std::string email) const = 0;
-    virtual bool createNewUser() const = 0;
+    // virtual bool login(std::string loginEmail, std::string loginPassword) const = 0;
+    // virtual bool getUser(std::string email) const = 0;
+    // virtual bool createNewUser() const = 0;
 };
 
 #endif

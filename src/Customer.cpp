@@ -6,7 +6,36 @@ Customer::Customer(string &name, string &email, string &password) : User(name, e
 
 Customer::~Customer() {};
 
-bool Customer::getUser(string email) const
+bool Customer::login(string loginEmail, string loginPassword)
+{
+    ifstream file("data/customer.txt");
+    if (!file.is_open())
+    {
+        cerr << "Error: could not open file 'data/product.txt'." << endl;
+        return false;
+    }
+
+    string line;
+    while (getline(file, line))
+    {
+
+        istringstream iss(line);
+        string email, name, password;
+        getline(iss, email, ';');
+        getline(iss, name, ';');
+        getline(iss, password, ';');
+
+        if (email == loginEmail && password == loginPassword)
+        {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+bool Customer::getUser(string email)
 {
     ifstream file("data/customer.txt");
     string linha;
@@ -26,9 +55,9 @@ bool Customer::getUser(string email) const
 
             return true;
 
-            // if (arquivo == "data/admins.txt")
+            // if (arquivo == "data/customers.txt")
             // {
-            //     return new Admin(nomeArquivo, emailArquivo, passwordArquivo);
+            //     return new customer(nomeArquivo, emailArquivo, passwordArquivo);
             // }
             // else if (arquivo == "data/customer.txt")
             // {
@@ -41,7 +70,7 @@ bool Customer::getUser(string email) const
     return false;
 }
 
-bool Customer::createNewUser() const
+bool Customer::createNewUser(std::string name, std::string email, std::string password)
 {
     if (getUser(email))
     {
@@ -54,7 +83,7 @@ bool Customer::createNewUser() const
         return false;
     }
 
-    file << email << ";" << username << ";" << password << "\n";
+    file << email << ";" << name << ";" << password << "\n";
     file.close();
     return true;
 }

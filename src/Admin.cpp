@@ -6,7 +6,35 @@ Admin::Admin(string &name, string &email, string &password) : User(name, email, 
 
 Admin::~Admin() {};
 
-bool Admin::getUser(string email) const
+bool Admin::login(string loginEmail, string loginPassword)
+{
+    ifstream file("data/admin.txt");
+    if (!file.is_open())
+    {
+        cerr << "Error: could not open file 'data/admin.txt'." << endl;
+        return false;
+    }
+
+    string line;
+    while (getline(file, line))
+    {
+        istringstream iss(line);
+        string email, name, password;
+        getline(iss, email, ';');
+        getline(iss, name, ';');
+        getline(iss, password, ';');
+
+        if (email == loginEmail && password == loginPassword)
+        {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+bool Admin::getUser(string email)
 {
     ifstream file("data/admin.txt");
     string linha;
@@ -41,9 +69,9 @@ bool Admin::getUser(string email) const
     return false;
 }
 
-bool Admin::createNewUser() const
+bool Admin::createNewUser(std::string name, std::string email, std::string password)
 {
-    if (getUser(this->email))
+    if (getUser(email))
     {
         return false;
     }
@@ -54,7 +82,7 @@ bool Admin::createNewUser() const
         return false;
     }
 
-    file << email << ";" << username << ";" << password << "\n";
+    file << email << ";" << name << ";" << password << "\n";
     file.close();
     return true;
 }

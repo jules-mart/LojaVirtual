@@ -10,8 +10,9 @@ public:
     Admin(std::string &name, std::string &email, std::string &password);
     ~Admin();
 
-    bool getUser(std::string email) const override;
-    bool createNewUser() const override;
+    static bool login(std::string loginEmail, std::string loginPassword);
+    static bool getUser(std::string email);
+    static bool createNewUser(std::string name, std::string email, std::string password);
 };
 
 #endif
