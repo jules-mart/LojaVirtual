@@ -42,7 +42,6 @@ int StoreSystem::run(void)
             continue;
         }
 
-        
         StoreSystem::clear();
         string email, password;
         switch (choice)
