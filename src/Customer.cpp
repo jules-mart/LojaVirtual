@@ -1,9 +1,8 @@
-#include <Customer.hpp>
-#include <User.hpp>
+#include <CustomLibraries.hpp>
 
 using namespace std;
 
-Customer::Customer(string &name, string &email, string &password) : Customer(name, email, password) {};
+Customer::Customer(string &name, string &email, string &password) : User(name, email, password) {};
 
 Customer::~Customer() {};
 
@@ -55,7 +54,7 @@ bool Customer::createNewUser() const
         return false;
     }
 
-    file << email << " " << name << " " << password << "\n";
+    file << email << " " << username << " " << password << "\n";
     file.close();
     return true;
 }

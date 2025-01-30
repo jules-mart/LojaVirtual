@@ -1,9 +1,8 @@
-#include <Admin.hpp>
-#include <User.hpp>
+#include <CustomLibraries.hpp>
 
 using namespace std;
 
-Admin::Admin(string &name, string &email, string &password) : Admin(name, email, password) {};
+Admin::Admin(string &name, string &email, string &password) : User(name, email, password) {};
 
 Admin::~Admin() {};
 
@@ -55,7 +54,7 @@ bool Admin::createNewUser() const
         return false;
     }
 
-    file << email << " " << name << " " << password << "\n";
+    file << email << " " << username << " " << password << "\n";
     file.close();
     return true;
 }
