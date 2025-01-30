@@ -7,5 +7,7 @@ int	main(int argc, char *argv[]) {
         return 1;
     }
 
+    system("clear");
     StoreSystem store(argv[1]);
+    store.run();
 }
