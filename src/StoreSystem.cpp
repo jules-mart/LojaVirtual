@@ -44,7 +44,8 @@ int StoreSystem::run(void)
         }
 
         StoreSystem::clear();
-        string email, password;
+        string name, email, password;
+        bool canLogIn = false;
         switch (choice)
         {
         case 1:
@@ -53,6 +54,13 @@ int StoreSystem::run(void)
             cin >> email;
             cout << "Enter your password: ";
             cin >> password;
+            canLogIn = Admin::login(email, password);
+            if (canLogIn) 
+            {
+                cout << "Credentials validated. Log in as admin..." << endl;
+            } else {
+                cout << "Invalid credentials. Try again." << endl;
+            }
             break;
         case 2:
             cout << "--- Customer menu ---" << endl;
@@ -60,13 +68,23 @@ int StoreSystem::run(void)
             cin >> email;
             cout << "Enter your password: ";
             cin >> password;
+            canLogIn = Customer::login(email, password);
+            if (canLogIn) 
+            {
+                cout << "Credentials validated. Log in as customer..." << endl;
+            } else {
+                cout << "Invalid credentials. Try again." << endl;
+            }
             break;
         case 3:
             cout << "--- New customer menu ---" << endl;
+            cout << "Enter your name: ";
+            cin >> name;
             cout << "Enter your email: ";
             cin >> email;
             cout << "Enter your password: ";
             cin >> password;
+            Customer::createNewUser(name, email, password);
             break;
         case 4:
             cout << "Exiting..." << endl;
@@ -74,8 +92,6 @@ int StoreSystem::run(void)
         default:
             break;
         }
-        cout << "Email: " << email << endl;
-        cout << "Password: " << password << endl;
     }
 }
 
@@ -90,17 +106,20 @@ void StoreSystem::loadProducts(void)
 
     products.clear();
     string line;
-    while (getline(file, line, ';'))
+    while (getline(file, line))
     {
 
         istringstream iss(line);
-        int id, quantity;
-        string name;
-        float price;
+        string id, quantity, name, price;
 
-        if (iss >> id >> name >> price >> quantity)
+        getline(iss, id, ';');
+        getline(iss, name, ';');
+        getline(iss, price, ';');
+        getline(iss, quantity, ';');
+        
+        if (!id.empty() && !name.empty() && !price.empty() && !quantity.empty())
         {
-            Product product(id, name, price, quantity);
+            Product product(stoi(id), name, stof(price), stoi(quantity));
             products.push_back(product);
         }
         else
