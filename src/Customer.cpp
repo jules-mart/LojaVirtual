@@ -6,7 +6,7 @@ Customer::Customer(string &name, string &email, string &password) : User(name, e
 
 Customer::~Customer() {};
 
-bool Admin::getUser(string email) const
+bool Customer::getUser(string email) const
 {
     ifstream file("data/customer.txt");
     string linha;
