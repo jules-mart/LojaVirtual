@@ -7,12 +7,17 @@
 class Customer : public User
 {
 public:
-    Customer(std::string &nome, std::string &email, std::string &password);
+    Customer(const std::string &nome, const std::string &email, const std::string &password);
     ~Customer();
 
     static bool login(std::string loginEmail, std::string loginPassword);
-    static bool createNewUser(std::string name, std::string email, std::string password);
-    static bool getUser(std::string email);
+    static bool createNewUser(const std::string &name, const std::string &email, const std::string &password);
+    static Customer getUser(const std::string &email);
+
+    std::string getEmail();
+    std::string getName();
+    void setEmail(const std::string &email);
+    void setName(const std::string &name);
 };
 
 #endif

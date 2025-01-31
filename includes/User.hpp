@@ -11,7 +11,7 @@ protected:
     std::string password;
 
 public:
-    User(std::string &name, std::string &email, std::string &password);
+    User(const std::string &name, const std::string &email, const std::string &password);
 
     // virtual bool login(std::string loginEmail, std::string loginPassword) const = 0;
     // virtual bool getUser(std::string email) const = 0;

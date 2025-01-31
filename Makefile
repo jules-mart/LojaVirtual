@@ -5,7 +5,7 @@ CXXFLAGS = -Iincludes -std=c++17
 
 # Directories
 SRC_DIR = src
-INCLUDE_DIR = include
+INCLUDE_DIR = includes
 BUILD_DIR = build
 
 # Source and object files

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Customer::Customer(string &name, string &email, string &password) : User(name, email, password) {};
+Customer::Customer(const string &name, const string &email, const string &password) : User(name, email, password) {};
 
 Customer::~Customer() {};
 
@@ -35,44 +35,9 @@ bool Customer::login(string loginEmail, string loginPassword)
     return false;
 }
 
-bool Customer::getUser(string email)
+bool Customer::createNewUser(const std::string &name, const std::string &email, const std::string &password)
 {
-    ifstream file("data/customer.txt");
-    string linha;
-
-    while (getline(file, linha))
-    {
-        istringstream iss(linha);
-        string emailArquivo, nomeArquivo, passwordArquivo;
-
-        getline(iss, emailArquivo, ';');
-        getline(iss, nomeArquivo, ';');
-        getline(iss, passwordArquivo, ';');
-
-        if (emailArquivo == email)
-        {
-            file.close();
-
-            return true;
-
-            // if (arquivo == "data/customers.txt")
-            // {
-            //     return new customer(nomeArquivo, emailArquivo, passwordArquivo);
-            // }
-            // else if (arquivo == "data/customer.txt")
-            // {
-            //     return new Customer(nomeArquivo, emailArquivo, passwordArquivo);
-            // }
-        }
-    }
-
-    file.close();
-    return false;
-}
-
-bool Customer::createNewUser(std::string name, std::string email, std::string password)
-{
-    if (getUser(email))
+    if (getUser(email).getEmail() != "")
     {
         return false;
     }
@@ -86,4 +51,46 @@ bool Customer::createNewUser(std::string name, std::string email, std::string pa
     file << email << ";" << name << ";" << password << "\n";
     file.close();
     return true;
+}
+
+Customer Customer::getUser(const std::string &Email)
+{
+    std::ifstream file("data/customer.txt");
+    if (!file.is_open())
+    {
+        std::cerr << "Error opening file!" << std::endl;
+        return Customer("", "", "");
+    }
+
+    std::string line;
+    while (getline(file, line))
+    {
+        std::istringstream iss(line);
+        std::string usernameInFile, emailInFile, passwordInFile;
+
+        // Extrai os campos separados por ';'
+        if (std::getline(iss, emailInFile, ';') &&
+            std::getline(iss, usernameInFile, ';') &&
+            std::getline(iss, passwordInFile, ';'))
+        {
+
+            // Compara o email
+            if (Email == emailInFile)
+            {
+                return Customer(usernameInFile, emailInFile, passwordInFile);
+            }
+        }
+    }
+
+    // Retorna um Admin padrão indicando usuário não encontrado
+    return Customer("", "", "");
+}
+
+std::string Customer::getName()
+{
+    return username;
+}
+std::string Customer::getEmail()
+{
+    return email;
 }
