@@ -3,6 +3,7 @@
 using namespace std;
 
 Customer::Customer(const string &name, const string &email, const string &password) : User(name, email, password) {};
+Customer::Customer(const string &email, const string &password) : User(email, password) {};
 
 Customer::~Customer() {};
 
@@ -93,4 +94,17 @@ std::string Customer::getName()
 std::string Customer::getEmail()
 {
     return email;
+}
+
+void Customer::addProduct(Product product)
+{
+    if (product.getId() > 0)
+    {
+        cart.addProductToCart(product);
+    }
+}
+
+void Customer::clearCart()
+{
+    cart.clear();
 }

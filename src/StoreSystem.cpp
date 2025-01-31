@@ -55,10 +55,12 @@ int StoreSystem::run(void)
             cout << "Enter your password: ";
             cin >> password;
             canLogIn = Admin::login(email, password);
-            if (canLogIn) 
+            if (canLogIn)
             {
                 cout << "Credentials validated. Log in as admin..." << endl;
-            } else {
+            }
+            else
+            {
                 cout << "Invalid credentials. Try again." << endl;
             }
             break;
@@ -69,10 +71,14 @@ int StoreSystem::run(void)
             cout << "Enter your password: ";
             cin >> password;
             canLogIn = Customer::login(email, password);
-            if (canLogIn) 
+            if (canLogIn)
             {
                 cout << "Credentials validated. Log in as customer..." << endl;
-            } else {
+
+                customerMenuLoop(Customer(email, password));
+            }
+            else
+            {
                 cout << "Invalid credentials. Try again." << endl;
             }
             break;
@@ -85,9 +91,12 @@ int StoreSystem::run(void)
             cout << "Enter your password: ";
             cin >> password;
             userCreated = Customer::createNewUser(name, email, password);
-            if (userCreated) {
+            if (userCreated)
+            {
                 cout << "Account created successfully. Now, you can log in as a customer" << endl;
-            } else {
+            }
+            else
+            {
                 cout << "Email already in use. Try again with another one." << endl;
             }
             break;
@@ -121,7 +130,7 @@ void StoreSystem::loadProducts(void)
         getline(iss, name, ';');
         getline(iss, price, ';');
         getline(iss, quantity, ';');
-        
+
         if (!id.empty() && !name.empty() && !price.empty() && !quantity.empty())
         {
             Product product(stoi(id), name, stof(price), stoi(quantity));
@@ -143,4 +152,94 @@ void StoreSystem::listProducts(void)
     {
         cout << product.getId() << " - " << product.getName() << " - R$" << product.getPrice() << " - " << product.getQuantity() << endl;
     }
+}
+
+void StoreSystem::customerMenuLoop(Customer customer)
+{
+
+    customer.clearCart(); // Reset cart for new session
+
+    while (true)
+    {
+        int choice;
+        cout << "\nCustomer Menu:" << endl;
+        cout << "1. View Products" << endl;
+        cout << "2. Add to Cart" << endl;
+        cout << "3. View Cart" << endl;
+        cout << "4. Checkout" << endl;
+        cout << "5. Logout" << endl;
+
+        cin >> choice;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter a number." << endl;
+            continue;
+        }
+
+        StoreSystem::clear();
+
+        switch (choice)
+        {
+        case 1:
+            listProducts();
+            break;
+        case 2:
+            int id;
+            cout << "Which product do you want to add?" << endl;
+            listProducts();
+            cout << "(Type the id of the product)" << endl;
+            cin >> id;
+            customer.addProduct(StoreSystem::getProductById(id));
+            break;
+        case 3:
+            customer.cart.displayCartProducts();
+            break;
+        case 4:
+            // checkout();
+            break;
+        case 5:
+            cout << "Logging out..." << endl;
+            return; // Return to main menu
+        default:
+            cout << "Invalid choice. Try again." << endl;
+            break;
+        }
+    }
+}
+
+Product StoreSystem::getProductById(int id)
+{
+    std::ifstream file("data/product.txt");
+    if (!file.is_open())
+    {
+        std::cerr << "Error opening file!" << std::endl;
+        // Retorna um Admin padrão indicando erro
+        return Product(0, "", 0, 0);
+    }
+
+    std::string line;
+    while (std::getline(file, line))
+    {
+        std::istringstream iss(line);
+        std::string idInFile, nameInFile, priceInFile, quantityInFile;
+
+        // Extrai os campos separados por ';'
+        if (std::getline(iss, idInFile, ';') &&
+            std::getline(iss, nameInFile, ';') &&
+            std::getline(iss, priceInFile, ';') &&
+            std::getline(iss, quantityInFile, ';'))
+        {
+
+            // Compara o email
+            if (id == stoi(idInFile))
+            {
+                return Product(stoi(idInFile), nameInFile, stof(priceInFile), stoi(quantityInFile));
+            }
+        }
+    }
+
+    // Retorna um Admin padrão indicando usuário não encontrado
+    return Product(0, "", 0, 0);
 }

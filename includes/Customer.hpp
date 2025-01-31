@@ -6,9 +6,15 @@
 
 class Customer : public User
 {
+
 public:
-    Customer(const std::string &nome, const std::string &email, const std::string &password);
+    Customer(const std::string &username, const std::string &email, const std::string &password);
+    Customer(const std::string &email, const std::string &password);
     ~Customer();
+
+    Cart cart;
+    void addProduct(Product);
+    void clearCart();
 
     static bool login(std::string loginEmail, std::string loginPassword);
     static bool createNewUser(const std::string &name, const std::string &email, const std::string &password);

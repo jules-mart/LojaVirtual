@@ -3,6 +3,7 @@
 
 #include <ExternalLibraries.hpp>
 #include <CustomLibraries.hpp>
+#include <Customer.hpp>
 
 class StoreSystem
 {
@@ -19,6 +20,9 @@ public:
 
     void loadProducts(void);
     void listProducts(void);
+    void customerMenuLoop(Customer customer);
+
+    static Product getProductById(int id);
 };
 
 #endif

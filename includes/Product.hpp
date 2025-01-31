@@ -24,6 +24,8 @@ public:
     void setName(std::string name);
     void setPrice(float price);
     void setQuantity(int quantity);
+
+    
 };
 
 #endif

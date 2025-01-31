@@ -6,5 +6,6 @@
 #include <User.hpp>
 #include <Admin.hpp>
 #include <Customer.hpp>
+#include <Cart.hpp>
 
 #endif
