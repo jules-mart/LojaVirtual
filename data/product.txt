@@ -1,1 +1,6 @@
-1;copo;9.90;10
+1;cerveja;10;3
+2;cenoura;19;10
+4;beterraba;22;17
+6;bolacha;2;20
+5;azeite;1;19
+3;pastel;4;28

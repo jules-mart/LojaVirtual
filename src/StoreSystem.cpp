@@ -39,7 +39,8 @@ int StoreSystem::run(void)
         {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input. Please enter a number." << endl;
+            cout << "Invalid input. Please enter a number.\n"
+                 << endl;
             continue;
         }
 
@@ -58,10 +59,12 @@ int StoreSystem::run(void)
             if (canLogIn)
             {
                 cout << "Credentials validated. Log in as admin..." << endl;
+                adminMenuLoop(Admin::getUser(email));
             }
             else
             {
-                cout << "Invalid credentials. Try again." << endl;
+                cout << "Invalid credentials. Try again. \n"
+                     << endl;
             }
             break;
         case 2:
@@ -75,7 +78,7 @@ int StoreSystem::run(void)
             {
                 cout << "Credentials validated. Log in as customer..." << endl;
 
-                customerMenuLoop(Customer(email, password));
+                customerMenuLoop(Customer::getUser(email));
             }
             else
             {
@@ -117,8 +120,8 @@ void StoreSystem::loadProducts(void)
         cerr << "Error: could not open file 'data/product.txt'." << endl;
         return;
     }
-
     products.clear();
+
     string line;
     while (getline(file, line))
     {
@@ -156,9 +159,7 @@ void StoreSystem::listProducts(void)
 
 void StoreSystem::customerMenuLoop(Customer customer)
 {
-
     customer.clearCart(); // Reset cart for new session
-
     while (true)
     {
         int choice;
@@ -186,13 +187,20 @@ void StoreSystem::customerMenuLoop(Customer customer)
             listProducts();
             break;
         case 2:
-            int id;
+        {
+
+            int id, quantity;
             cout << "Which product do you want to add?" << endl;
             listProducts();
-            cout << "(Type the id of the product)" << endl;
+            cout << endl
+                 << "Type the product ID: ";
             cin >> id;
-            customer.addProduct(StoreSystem::getProductById(id));
+            cout << "Type the quantity: ";
+            cin >> quantity;
+
+            customer.addProductToCart(getProductById(id), quantity);
             break;
+        }
         case 3:
             customer.cart.displayCartProducts();
             break;
@@ -209,37 +217,227 @@ void StoreSystem::customerMenuLoop(Customer customer)
     }
 }
 
+Product *StoreSystem::getProductByIdPtr(int id)
+{
+    loadProducts();                // Ensure products are up-to-date
+    for (auto &product : products) // Iterate through the actual vector
+    {
+        if (product.getId() == id)
+        {
+            return &product; // Return a pointer to the product
+        }
+    }
+    return nullptr; // Return nullptr if product not found
+}
+
 Product StoreSystem::getProductById(int id)
 {
-    std::ifstream file("data/product.txt");
-    if (!file.is_open())
-    {
-        std::cerr << "Error opening file!" << std::endl;
-        // Retorna um Admin padrão indicando erro
-        return Product(0, "", 0, 0);
-    }
 
-    std::string line;
-    while (std::getline(file, line))
+    loadProducts();
+    // Search in the loaded products vector
+    for (Product product : products)
     {
-        std::istringstream iss(line);
-        std::string idInFile, nameInFile, priceInFile, quantityInFile;
-
-        // Extrai os campos separados por ';'
-        if (std::getline(iss, idInFile, ';') &&
-            std::getline(iss, nameInFile, ';') &&
-            std::getline(iss, priceInFile, ';') &&
-            std::getline(iss, quantityInFile, ';'))
+        if (product.getId() == id)
         {
-
-            // Compara o email
-            if (id == stoi(idInFile))
-            {
-                return Product(stoi(idInFile), nameInFile, stof(priceInFile), stoi(quantityInFile));
-            }
+            return product;
         }
     }
 
-    // Retorna um Admin padrão indicando usuário não encontrado
     return Product(0, "", 0, 0);
+}
+
+// Product *StoreSystem::getProductById(int id)
+// {
+
+//     std::ifstream file("data/product.txt");
+//     if (!file.is_open())
+//     {
+//         std::cerr << "Error opening file!" << std::endl;
+//         // Retorna um Admin padrão indicando erro
+//         return nullptr;
+//     }
+
+//     std::string line;
+//     while (std::getline(file, line))
+//     {
+
+//         std::istringstream iss(line);
+//         std::string idInFile, nameInFile, priceInFile, quantityInFile;
+
+//         // Extrai os campos separados por ';'
+//         if (std::getline(iss, idInFile, ';') &&
+//             std::getline(iss, nameInFile, ';') &&
+//             std::getline(iss, priceInFile, ';') &&
+//             std::getline(iss, quantityInFile))
+//         {
+
+//             // Compara o email
+//             if (id == stoi(idInFile))
+//             {
+
+//                 if (stoi(idInFile) && stof(priceInFile) && stoi(quantityInFile))
+//                 {
+//                     return new Product(stoi(idInFile), nameInFile, stof(priceInFile), stoi(quantityInFile));
+//                 }
+
+//                 cout << "Invalid product properties!" << endl;
+//                 return nullptr;
+//             }
+//         }
+//     }
+//     return nullptr;
+// }
+
+void StoreSystem::adminMenuLoop(Admin *admin)
+{
+
+    while (true)
+    {
+        int choice;
+        cout << "\nAdmin Menu:" << endl;
+        cout << "1. View Products" << endl;
+        cout << "2. Add Product" << endl;
+        cout << "3. Edit Product" << endl;
+        cout << "4. Logout" << endl;
+
+        cin >> choice;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter a number." << endl;
+            continue;
+        }
+
+        StoreSystem::clear();
+
+        switch (choice)
+        {
+        case 1:
+            listProducts();
+            break;
+        case 2:
+        {
+            addProductLoop();
+            break;
+        }
+        case 3:
+            editProductLoop();
+            break;
+        case 4:
+            cout << "Logging out..." << endl;
+            return; // Return to main menu
+
+        default:
+            cout << "Invalid choice. Try again." << endl;
+            break;
+        }
+    }
+}
+
+void StoreSystem::addProductLoop()
+{
+    int id, quantity;
+    string name;
+    float price;
+    std::cout << "What's the product ID: ";
+    std::cin >> id;
+    std::cout << "What's the product name: ";
+    std::cin >> name;
+    std::cout << "What's the product price: ";
+    std::cin >> price;
+    std::cout << "What's the product quantity: ";
+    std::cin >> quantity;
+
+    Product product(id, name, price, quantity);
+    products.push_back(product);
+
+    bool wasProductCreated = Admin::createNewProduct(product); // Then save to file
+
+    for (auto &c : name)
+        c = toupper(c);
+    if (wasProductCreated)
+    {
+        std::cout << name << " was added successfully!" << endl;
+    }
+    else
+    {
+        std::cout << "An error occour while adding " << name << endl;
+    }
+}
+
+void StoreSystem::editProductLoop()
+{
+
+    int targetId;
+    cout << "Enter product ID to edit: ";
+    cin >> targetId;
+
+    Product *product = getProductByIdPtr(targetId);
+    if (product->getId() != 0 & product->getName().empty())
+    {
+        cout << "404 - Product not found!" << endl;
+        return;
+    }
+
+    while (true)
+    {
+        cout << "\nEditing product: " << product->getName() << endl;
+        cout << "1. Edit name" << endl;
+        cout << "2. Edit price" << endl;
+        cout << "3. Edit quantity" << endl;
+        cout << "4. Finish editing" << endl;
+
+        int choice;
+        cin >> choice;
+        cin.ignore(); // Clear newline character
+
+        switch (choice)
+        {
+        case 1:
+        {
+            string newName;
+            cout << "Old name: " << product->getName() << endl;
+            cout << "New name: ";
+            getline(cin, newName);
+            product->setName(newName);
+            break;
+        }
+        case 2:
+        {
+            float newPrice;
+            cout << "Old price: " << product->getPrice() << endl;
+            cout << "New price: ";
+            while (!(cin >> newPrice) || newPrice <= 0)
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid price. Enter a positive number: ";
+            }
+            product->setPrice(newPrice);
+            break;
+        }
+        case 3:
+        {
+            int newQuantity;
+            cout << "Old quantity: " << product->getQuantity() << endl;
+            cout << "New quantity: ";
+            while (!(cin >> newQuantity) || newQuantity < 0)
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid quantity. Enter a non-negative number: ";
+            }
+            product->setQuantity(newQuantity);
+            break;
+        }
+        case 4:
+            Admin::saveProduct(products);
+            cout << "Changes saved successfully!" << endl;
+            return;
+        default:
+            cout << "Invalid choice!" << endl;
+            break;
+        }
+    }
 }

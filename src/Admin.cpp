@@ -6,6 +6,22 @@ Admin::Admin(const string &username, const string &email, const string &password
 
 Admin::~Admin() {};
 
+std::string Admin::getName()
+{
+    return username;
+}
+std::string Admin::getEmail()
+{
+    return email;
+}
+void Admin::setEmail(const std::string &Email)
+{
+    email = Email;
+}
+void Admin::setName(const std::string &Name)
+{
+    username = Name;
+}
 bool Admin::login(string loginEmail, string loginPassword)
 {
     ifstream file("data/admin.txt");
@@ -36,7 +52,7 @@ bool Admin::login(string loginEmail, string loginPassword)
 
 bool Admin::createNewUser(const string &username, const string &email, const string &password)
 {
-    if (Admin::getUser(email).getEmail() == "")
+    if (Admin::getUser(email) == nullptr)
     {
         return false;
     }
@@ -52,14 +68,14 @@ bool Admin::createNewUser(const string &username, const string &email, const str
     return true;
 }
 
-Admin Admin::getUser(const string &email)
+Admin *Admin::getUser(const string &email)
 {
     std::ifstream file("data/admin.txt");
     if (!file.is_open())
     {
         std::cerr << "Error opening file!" << std::endl;
         // Retorna um Admin padrão indicando erro
-        return Admin("", "", "");
+        return nullptr;
     }
 
     std::string line;
@@ -77,28 +93,50 @@ Admin Admin::getUser(const string &email)
             // Compara o email
             if (email == emailInFile)
             {
-                return Admin(usernameInFile, emailInFile, passwordInFile);
+                return new Admin(usernameInFile, emailInFile, passwordInFile);
             }
         }
     }
 
     // Retorna um Admin padrão indicando usuário não encontrado
-    return Admin("", "", "");
+    return nullptr;
 }
 
-std::string Admin::getName()
+bool Admin::createNewProduct(Product product)
 {
-    return username;
+    if (!product.isValidProduct())
+        return false;
+
+    ofstream file("data/product.txt", ios::app);
+    if (!file.is_open())
+    {
+        return false;
+    }
+
+    file << product.getId() << ";" << product.getName() << ";" << product.getPrice() << ";" << product.getQuantity() << "\n";
+    file.close();
+    return true;
 }
-std::string Admin::getEmail()
+
+bool Admin::saveProduct(vector<Product> products)
 {
-    return email;
-}
-void Admin::setEmail(const std::string &Email)
-{
-    email = Email;
-}
-void Admin::setName(const std::string &Name)
-{
-    username = Name;
+
+    ofstream file("data/product.txt");
+    if (!file.is_open())
+    {
+        cerr << "Error saving products!" << endl;
+        return false;
+    }
+
+    for (Product product : products)
+    {
+
+        file << product.getId() << ";"
+             << product.getName() << ";"
+             << product.getPrice() << ";"
+             << product.getQuantity() << "\n";
+    }
+
+    file.close();
+    return true;
 }

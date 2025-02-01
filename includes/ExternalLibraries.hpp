@@ -7,5 +7,6 @@
 #include <memory>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 #endif

@@ -96,11 +96,11 @@ std::string Customer::getEmail()
     return email;
 }
 
-void Customer::addProduct(Product product)
+void Customer::addProductToCart(Product product, int quantity)
 {
     if (product.getId() > 0)
     {
-        cart.addProductToCart(product);
+        cart.addProductToCart(product, quantity);
     }
 }
 

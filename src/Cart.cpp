@@ -13,8 +13,9 @@ void Cart::displayCartProducts(void)
     }
 }
 
-void Cart::addProductToCart(Product product)
+void Cart::addProductToCart(Product product, int quantity)
 {
+    product.setQuantity(quantity);
     products.push_back(product);
 }
 

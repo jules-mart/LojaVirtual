@@ -4,7 +4,7 @@
 #include <ExternalLibraries.hpp>
 #include <CustomLibraries.hpp>
 #include <Customer.hpp>
-
+#include <Admin.hpp>
 class StoreSystem
 {
 private:
@@ -21,8 +21,12 @@ public:
     void loadProducts(void);
     void listProducts(void);
     void customerMenuLoop(Customer customer);
+    void adminMenuLoop(Admin *admin);
+    void editProductLoop();
+    void addProductLoop();
 
-    static Product getProductById(int id);
+    Product *getProductByIdPtr(int id);
+    Product getProductById(int id);
 };
 
 #endif

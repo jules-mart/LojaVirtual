@@ -13,6 +13,7 @@ private:
 
 public:
     Product(int id, std::string name, float price, int quantity);
+    Product();
     ~Product();
 
     int getId();
@@ -25,7 +26,7 @@ public:
     void setPrice(float price);
     void setQuantity(int quantity);
 
-    
+    bool isValidProduct();
 };
 
 #endif

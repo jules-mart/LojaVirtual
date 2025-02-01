@@ -12,7 +12,7 @@ private:
 public:
     Cart();
     void displayCartProducts();
-    void addProductToCart(Product);
+    void addProductToCart(Product product, int quantity);
     void clear();
 };
 
