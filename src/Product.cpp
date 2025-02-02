@@ -52,3 +52,8 @@ bool Product::isValidProduct()
     }
     return false;
 };
+
+void Product::printProduct()
+{
+    cout << id << " - " << name << " - R$" << price << " - " << quantity << endl;
+}

@@ -27,6 +27,8 @@ public:
 
     Product *getProductByIdPtr(int id);
     Product getProductById(int id);
+
+    void checkout(Cart &cart);
 };
 
 #endif

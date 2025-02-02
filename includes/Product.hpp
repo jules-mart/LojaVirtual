@@ -27,6 +27,7 @@ public:
     void setQuantity(int quantity);
 
     bool isValidProduct();
+    void printProduct();
 };
 
 #endif

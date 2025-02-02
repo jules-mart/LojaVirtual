@@ -104,7 +104,20 @@ void Customer::addProductToCart(Product product, int quantity)
     }
 }
 
+void Customer::removeProductFromCart(Product product, int quantity)
+{
+    if (product.getId() > 0)
+    {
+        cart.addProductToCart(product, quantity);
+    }
+}
+
 void Customer::clearCart()
 {
     cart.clear();
+}
+
+Cart &Customer::getCart()
+{
+    return cart;
 }

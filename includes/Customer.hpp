@@ -15,6 +15,7 @@ public:
     ~Customer();
 
     void addProductToCart(Product product, int quantity);
+    void removeProductFromCart(Product product, int quantity);
     void clearCart();
     Cart cart;
 
@@ -26,6 +27,8 @@ public:
     std::string getName();
     void setEmail(const std::string &email);
     void setName(const std::string &name);
+
+    Cart &getCart();
 };
 
 #endif

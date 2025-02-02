@@ -50,7 +50,7 @@ int StoreSystem::run(void)
         switch (choice)
         {
         case 1:
-            cout << "--- Admin menu ---" << endl;
+            cout << "--- Admin Login ---" << endl;
             cout << "Enter your email: ";
             cin >> email;
             cout << "Enter your password: ";
@@ -68,7 +68,7 @@ int StoreSystem::run(void)
             }
             break;
         case 2:
-            cout << "--- Customer menu ---" << endl;
+            cout << "--- Customer Login ---" << endl;
             cout << "Enter your email: ";
             cin >> email;
             cout << "Enter your password: ";
@@ -77,7 +77,6 @@ int StoreSystem::run(void)
             if (canLogIn)
             {
                 cout << "Credentials validated. Log in as customer..." << endl;
-
                 customerMenuLoop(Customer::getUser(email));
             }
             else
@@ -86,7 +85,7 @@ int StoreSystem::run(void)
             }
             break;
         case 3:
-            cout << "--- New customer menu ---" << endl;
+            cout << "--- New customer ---" << endl;
             cout << "Enter your name: ";
             cin >> name;
             cout << "Enter your email: ";
@@ -94,6 +93,7 @@ int StoreSystem::run(void)
             cout << "Enter your password: ";
             cin >> password;
             userCreated = Customer::createNewUser(name, email, password);
+
             if (userCreated)
             {
                 cout << "Account created successfully. Now, you can log in as a customer" << endl;
@@ -153,7 +153,7 @@ void StoreSystem::listProducts(void)
     cout << "Products available:" << endl;
     for (Product product : products)
     {
-        cout << product.getId() << " - " << product.getName() << " - R$" << product.getPrice() << " - " << product.getQuantity() << endl;
+        product.printProduct();
     }
 }
 
@@ -166,9 +166,10 @@ void StoreSystem::customerMenuLoop(Customer customer)
         cout << "\nCustomer Menu:" << endl;
         cout << "1. View Products" << endl;
         cout << "2. Add to Cart" << endl;
-        cout << "3. View Cart" << endl;
-        cout << "4. Checkout" << endl;
-        cout << "5. Logout" << endl;
+        cout << "3. Remove from Cart" << endl;
+        cout << "4. View Cart" << endl;
+        cout << "5. Checkout" << endl;
+        cout << "6. Logout" << endl;
 
         cin >> choice;
         if (cin.fail())
@@ -195,19 +196,74 @@ void StoreSystem::customerMenuLoop(Customer customer)
             cout << endl
                  << "Type the product ID: ";
             cin >> id;
+
+            Product *product = getProductByIdPtr(id);
+            if (!product)
+            {
+                cout << "Product not found!" << endl;
+                break;
+            }
+
             cout << "Type the quantity: ";
             cin >> quantity;
 
-            customer.addProductToCart(getProductById(id), quantity);
+            // Verificar estoque
+            int currentInCart = customer.getCart().getProductQuantity(id);
+            int availableStock = product->getQuantity() - currentInCart;
+
+            if (quantity <= 0)
+            {
+                cout << "Invalid quantity!" << endl;
+            }
+            else if (availableStock < quantity)
+            {
+                cout << "Not enough stock! Available: " << availableStock << endl;
+            }
+            else
+            {
+                clear();
+                customer.addProductToCart(*product, quantity);
+                cout << "Added to cart: " << product->getName()
+                     << " x" << quantity << endl;
+            }
+
             break;
         }
         case 3:
+        { // Novo caso para remover produtos
+            int id, quantity;
+            cout << "Which product do you want to remove?" << endl;
+            customer.getCart().displayCartProducts();
+            cout << "(Type the id of the product)" << endl;
+            cin >> id;
+
+            cout << "Enter quantity to remove: ";
+            cin >> quantity;
+
+            if (quantity <= 0)
+            {
+                cout << "Invalid quantity!" << endl;
+                break;
+            }
+
+            bool success = customer.getCart().removeProductFromCart(id, quantity);
+            if (success)
+            {
+                cout << "Product updated in cart!" << endl;
+            }
+            else
+            {
+                cout << "Product not found in cart!" << endl;
+            }
+            break;
+        }
+        case 4:
             customer.cart.displayCartProducts();
             break;
-        case 4:
+        case 5:
             // checkout();
             break;
-        case 5:
+        case 6:
             cout << "Logging out..." << endl;
             return; // Return to main menu
         default:
@@ -245,48 +301,6 @@ Product StoreSystem::getProductById(int id)
 
     return Product(0, "", 0, 0);
 }
-
-// Product *StoreSystem::getProductById(int id)
-// {
-
-//     std::ifstream file("data/product.txt");
-//     if (!file.is_open())
-//     {
-//         std::cerr << "Error opening file!" << std::endl;
-//         // Retorna um Admin padrão indicando erro
-//         return nullptr;
-//     }
-
-//     std::string line;
-//     while (std::getline(file, line))
-//     {
-
-//         std::istringstream iss(line);
-//         std::string idInFile, nameInFile, priceInFile, quantityInFile;
-
-//         // Extrai os campos separados por ';'
-//         if (std::getline(iss, idInFile, ';') &&
-//             std::getline(iss, nameInFile, ';') &&
-//             std::getline(iss, priceInFile, ';') &&
-//             std::getline(iss, quantityInFile))
-//         {
-
-//             // Compara o email
-//             if (id == stoi(idInFile))
-//             {
-
-//                 if (stoi(idInFile) && stof(priceInFile) && stoi(quantityInFile))
-//                 {
-//                     return new Product(stoi(idInFile), nameInFile, stof(priceInFile), stoi(quantityInFile));
-//                 }
-
-//                 cout << "Invalid product properties!" << endl;
-//                 return nullptr;
-//             }
-//         }
-//     }
-//     return nullptr;
-// }
 
 void StoreSystem::adminMenuLoop(Admin *admin)
 {
@@ -354,6 +368,7 @@ void StoreSystem::addProductLoop()
 
     bool wasProductCreated = Admin::createNewProduct(product); // Then save to file
 
+    clear();
     for (auto &c : name)
         c = toupper(c);
     if (wasProductCreated)
@@ -368,7 +383,7 @@ void StoreSystem::addProductLoop()
 
 void StoreSystem::editProductLoop()
 {
-
+    clear();
     int targetId;
     cout << "Enter product ID to edit: ";
     cin >> targetId;
