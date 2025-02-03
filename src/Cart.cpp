@@ -29,11 +29,11 @@ void Cart::addProductToCart(Product product, int quantity)
         if (p.getId() == product.getId())
         {
             p.setQuantity(p.getQuantity() + quantity);
-            sumTotal(p.getPrice());
+            sumTotal(p.getPrice() * quantity);
             return;
         }
     }
-    sumTotal(product.getPrice());
+    sumTotal(product.getPrice() * quantity);
     product.setQuantity(quantity);
     products.push_back(product);
 }

@@ -3,5 +3,6 @@
 4;beterraba;22;17
 6;bolacha;2;20
 5;azeite;1;19
-3;pastel;4;28
+3;Pastel de Queijo;5;30
 10;Computador;5000;5
+11;coca-cola;5.75;10
