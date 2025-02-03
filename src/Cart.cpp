@@ -47,6 +47,7 @@ bool Cart::removeProductFromCart(int productId, int quantity)
     if (it != products.end())
     {
         int newQuantity = it->getQuantity() - quantity;
+        float newTotal = total - (it->getPrice() * quantity);
 
         if (newQuantity <= 0)
         {
@@ -55,6 +56,7 @@ bool Cart::removeProductFromCart(int productId, int quantity)
         else
         {
             it->setQuantity(newQuantity);
+            total = newTotal;
         }
         return true;
     }
