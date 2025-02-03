@@ -96,6 +96,15 @@ std::string Customer::getEmail()
     return email;
 }
 
+void Customer::setEmail(const std::string &Email)
+{
+    email = Email;
+}
+void Customer::setName(const std::string &Name)
+{
+    username = Name;
+}
+
 void Customer::addProductToCart(Product product, int quantity)
 {
     if (product.getId() > 0)

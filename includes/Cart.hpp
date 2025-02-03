@@ -9,6 +9,7 @@ class Cart
 private:
     float total;
     std::vector<Product> products;
+    
 
 public:
     Cart();
@@ -21,6 +22,7 @@ public:
     void sumTotal(float price);
     float getTotal();
     int getProductQuantity(int productId);
+    void checkout();
 };
 
 #endif

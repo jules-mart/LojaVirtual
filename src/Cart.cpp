@@ -7,9 +7,16 @@ void Cart::displayCartProducts(void)
 {
     cout << "Products in the cart: " << endl;
 
-    for (Product product : products)
+    if (products.empty())
     {
-        product.printProduct();
+        cout << "   <Empty>\n" << endl;
+    }
+    else
+    {
+        for (Product product : products)
+        {
+            product.printProduct();
+        }
     }
 
     cout << "Total: R$" << getTotal() << endl;
@@ -52,6 +59,11 @@ bool Cart::removeProductFromCart(int productId, int quantity)
         return true;
     }
     return false;
+}
+
+void Cart::checkout()
+{
+    displayCartProducts();
 }
 
 void Cart::clear()

@@ -1,2 +1,3 @@
 customer@store.com;customer;654321
 roni@store.com;roni;123
+matheus;matheus@store.com;123

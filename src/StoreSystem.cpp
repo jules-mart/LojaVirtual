@@ -261,7 +261,7 @@ void StoreSystem::customerMenuLoop(Customer customer)
             customer.cart.displayCartProducts();
             break;
         case 5:
-            // checkout();
+            customer.cart.checkout();
             break;
         case 6:
             cout << "Logging out..." << endl;

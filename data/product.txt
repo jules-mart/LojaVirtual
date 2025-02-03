@@ -4,3 +4,4 @@
 6;bolacha;2;20
 5;azeite;1;19
 3;pastel;4;28
+10;Computador;5000;5
