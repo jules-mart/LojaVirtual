@@ -114,10 +114,10 @@ int StoreSystem::run(void)
 
 void StoreSystem::loadProducts(void)
 {
-    ifstream file("data/product.txt");
+    ifstream file("data/product.csv");
     if (!file.is_open())
     {
-        cerr << "Error: could not open file 'data/product.txt'." << endl;
+        cerr << "Error: could not open file 'data/product.csv'." << endl;
         return;
     }
     products.clear();

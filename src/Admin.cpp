@@ -24,10 +24,10 @@ void Admin::setName(const std::string &Name)
 }
 bool Admin::login(string loginEmail, string loginPassword)
 {
-    ifstream file("data/admin.txt");
+    ifstream file("data/admin.csv");
     if (!file.is_open())
     {
-        cerr << "Error: could not open file 'data/admin.txt'." << endl;
+        cerr << "Error: could not open file 'data/admin.csv'." << endl;
         return false;
     }
 
@@ -57,7 +57,7 @@ bool Admin::createNewUser(const string &username, const string &email, const str
         return false;
     }
 
-    ofstream file("data/admin.txt", ios::app);
+    ofstream file("data/admin.csv", ios::app);
     if (!file.is_open())
     {
         return false;
@@ -70,7 +70,7 @@ bool Admin::createNewUser(const string &username, const string &email, const str
 
 Admin *Admin::getUser(const string &email)
 {
-    std::ifstream file("data/admin.txt");
+    std::ifstream file("data/admin.csv");
     if (!file.is_open())
     {
         std::cerr << "Error opening file!" << std::endl;
@@ -107,7 +107,7 @@ bool Admin::createNewProduct(Product product)
     if (!product.isValidProduct())
         return false;
 
-    ofstream file("data/product.txt", ios::app);
+    ofstream file("data/product.csv", ios::app);
     if (!file.is_open())
     {
         return false;
@@ -121,7 +121,7 @@ bool Admin::createNewProduct(Product product)
 bool Admin::saveProduct(vector<Product> products)
 {
 
-    ofstream file("data/product.txt");
+    ofstream file("data/product.csv");
     if (!file.is_open())
     {
         cerr << "Error saving products!" << endl;

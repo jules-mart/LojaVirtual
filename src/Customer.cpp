@@ -9,10 +9,10 @@ Customer::~Customer() {};
 
 bool Customer::login(string loginEmail, string loginPassword)
 {
-    ifstream file("data/customer.txt");
+    ifstream file("data/customer.csv");
     if (!file.is_open())
     {
-        cerr << "Error: could not open file 'data/product.txt'." << endl;
+        cerr << "Error: could not open file 'data/product.csv'." << endl;
         return false;
     }
 
@@ -43,7 +43,7 @@ bool Customer::createNewUser(const std::string &name, const std::string &email, 
         return false;
     }
 
-    ofstream file("data/customer.txt", ios::app);
+    ofstream file("data/customer.csv", ios::app);
     if (!file.is_open())
     {
         return false;
@@ -56,7 +56,7 @@ bool Customer::createNewUser(const std::string &name, const std::string &email, 
 
 Customer Customer::getUser(const std::string &Email)
 {
-    std::ifstream file("data/customer.txt");
+    std::ifstream file("data/customer.csv");
     if (!file.is_open())
     {
         std::cerr << "Error opening file!" << std::endl;
